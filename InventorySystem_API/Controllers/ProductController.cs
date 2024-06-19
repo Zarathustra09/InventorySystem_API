@@ -5,9 +5,11 @@ using InventorySystem_API.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace InventorySystem_API.Controllers
 {
+  
     [Route("api/[controller]")]
     [ApiController]
     public class ProductController : ControllerBase
@@ -40,6 +42,7 @@ namespace InventorySystem_API.Controllers
         }
 
         // GET: api/Products/5
+        [Authorize(Policy = "RequireAdministratorRole")]
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductDto>> GetProduct(int id)
         {
@@ -66,6 +69,7 @@ namespace InventorySystem_API.Controllers
         }
 
         // POST: api/Products
+        [Authorize(Policy = "RequireAdministratorRole")]
         [HttpPost]
         public async Task<ActionResult<Product>> PostProduct(ProductDto productDto)
         {
@@ -84,6 +88,7 @@ namespace InventorySystem_API.Controllers
         }
 
         // PUT: api/Products/5
+        [Authorize(Policy = "RequireAdministratorRole")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProduct(int id, ProductDto productDto)
         {
@@ -125,6 +130,7 @@ namespace InventorySystem_API.Controllers
         }
 
         // DELETE: api/Products/5
+        [Authorize(Policy = "RequireAdministratorRole")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
@@ -134,11 +140,16 @@ namespace InventorySystem_API.Controllers
                 return NotFound();
             }
 
+            // Delete related transactions first
+            var transactions = _context.Transactions.Where(t => t.Product_Id == id);
+            _context.Transactions.RemoveRange(transactions);
+
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
+
 
         private bool ProductExists(int id)
         {
