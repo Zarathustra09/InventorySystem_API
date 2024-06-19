@@ -1,4 +1,5 @@
 using InventorySystem_API.Model;
+using InventorySystem_API.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace InventorySystem_API.DataConnection
@@ -21,7 +22,9 @@ namespace InventorySystem_API.DataConnection
         }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<Login> Logins { get; set; } // Add DbSet for Login if needed
+        public DbSet<Login> Logins { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
 
-  }
+    }
 }
