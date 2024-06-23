@@ -42,7 +42,7 @@ namespace InventorySystem_API.Controllers
         }
 
         // GET: api/Products/5
-        [Authorize(Policy = "RequireAdministratorRole")]
+  
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductDto>> GetProduct(int id)
         {
